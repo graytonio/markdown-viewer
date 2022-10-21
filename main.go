@@ -2,40 +2,23 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"os"
-	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/gomarkdown/markdown"
+	"grayton.jfrog.com/markdown-viewer/lib"
 )
-
-func read_in_mardown_file_content(path string) ([]byte, error) {
-	// Check for file extension
-	var fixed_path string = path
-	if !strings.HasSuffix(path, ".md") {
-		fixed_path = fmt.Sprintf("%s.md", path)
-	}
-
-	content, err := os.ReadFile(fixed_path)
-	if err != nil {
-		return nil, err
-	}
-	return markdown.ToHTML(content, nil, nil), nil
-}
 
 func main() {
 	router := gin.Default()
 
-	router.GET("*note_path", func(ctx *gin.Context) {
+	router.GET("/*note_path", func(ctx *gin.Context) {
 		path := ctx.Param("note_path")
-		log.Println(path)
-		content, err := read_in_mardown_file_content(path)
+		content, err := lib.FetchMarkdownAsHTML(path, lib.GetEnvD("MD_ROOT", "/"))
 		if err != nil {
 			// Handle not found
 			if os.IsNotExist(err) {
-				// Handle directory listing
+				// TODO Handle directory listing
 				ctx.AbortWithStatus(404)
 				return
 			}
@@ -46,6 +29,6 @@ func main() {
 		ctx.Data(http.StatusOK, "text/html", content)
 	})
 
-	// TODO Read in port from ENV
-	router.Run(":9090")
+	// Read in port from ENV
+	router.Run(fmt.Sprintf(":%s", lib.GetEnvD("PORT", "9090")))
 }

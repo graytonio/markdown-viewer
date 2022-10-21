@@ -3,13 +3,9 @@ services:
   markdown-viewer:
     restart: unless-stopped
     container_name: web-service
+    ports:
+      - "80:9090"
     build:
       context: .
     volumes:
       - ~/Library/CloudStorage/GoogleDrive-graytonw@jfrog.com/My Drive/Jfrog Notes:/markdown
-  nginx:
-    image: nginx:alpine
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx_server.conf:/etc/nginx/conf.d/default.conf
