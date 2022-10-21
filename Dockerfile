@@ -10,17 +10,16 @@ RUN go mod tidy
 RUN go build -ldflags="-s -w" -o ./bin/server .
 # ================================================================
 # Init runner container
-FROM nginx:alpine
+FROM alpine:3.16
 RUN apk --no-cache add ca-certificates
 WORKDIR /usr/bin
 # Copy built binary to runner container
 COPY --from=build /go/src/app/bin /go/bin
-# Replace default nginx.conf with custom one
-COPY nginx.conf /etc/nginx/nginx.conf 
 # Declare a volume mount where we expect the markdown files to be
 VOLUME ["/markdown"]
 
 ENV GIN_MODE=release
-ENV PORT=9090
 
-ENTRYPOINT /go/bin/server
+EXPOSE 9090
+
+CMD [ "/go/bin/server" ]
