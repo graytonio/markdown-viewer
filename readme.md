@@ -15,7 +15,7 @@ services:
     build:
       context: .
     volumes:
-      - ~/Library/CloudStorage/GoogleDrive-graytonw@jfrog.com/My Drive/Jfrog Notes:/markdown
+      - /path/to/my/vault:/markdown
   nginx:
     image: nginx:alpine
     ports:
