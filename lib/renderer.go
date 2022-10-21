@@ -16,9 +16,9 @@ func render_reference_link(w io.Writer, node ast.Node, entering bool) (ast.WalkS
 		return ast.GoToNext, false
 	}
 
-	io.WriteString(w, string(block.Literal))
+	new_content := internal_link_regex.ReplaceAllString(string(block.Literal), "<strong>$1</strong>")
 
-	// links := internal_link_regex.FindAllStringIndex(string(block.Literal), -1)
+	io.WriteString(w, new_content)
 
 	return ast.GoToNext, true
 }
