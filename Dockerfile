@@ -9,6 +9,7 @@ RUN go mod tidy
 # Build with optimize flags
 RUN go build -ldflags="-s -w" -o ./bin/server .
 # ================================================================
+
 # Init runner container
 FROM alpine:3.16
 RUN apk --no-cache add ca-certificates

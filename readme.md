@@ -9,24 +9,17 @@ An easy way to display and share markdown notes in a web browser.  This project 
 ```yaml
 version: "3.8"
 services:
-  markdown-viewer:
-    restart: unless-stopped
-    container_name: web-service
-    build:
-      context: .
+  mdview:
+    image: ghcr.io/graytonio/mdview:latest
+    container_name: mdview
     volumes:
       - /path/to/my/vault:/markdown
-  nginx:
-    image: nginx:alpine
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx_server.conf:/etc/nginx/conf.d/default.conf
+    restart: unless-stopped
 ```
 
 ## Parameters
 
 | Parameter | Function |
-| -- | -- |
+| --------- | -------- |
 | `MD_ROOT` | Root directory for markdown files |
 | `PORT` | Port for web interface |
