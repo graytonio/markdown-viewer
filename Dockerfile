@@ -12,14 +12,18 @@ RUN go build -ldflags="-s -w" -o ./bin/server .
 # Init runner container
 FROM alpine:3.16
 RUN apk --no-cache add ca-certificates
-WORKDIR /usr/bin
+WORKDIR /app
 # Copy built binary to runner container
-COPY --from=build /go/src/app/bin /go/bin
+COPY --from=build /go/src/app/bin /app
 # Declare a volume mount where we expect the markdown files to be
 VOLUME ["/markdown"]
+
+# Copy static files to static directory
+COPY ./static /app/static
+COPY ./templates /app/templates
 
 ENV GIN_MODE=release
 
 EXPOSE 9090
 
-CMD [ "/go/bin/server" ]
+CMD [ "/app/server" ]

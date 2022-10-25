@@ -10,22 +10,25 @@ import (
 
 var internal_link_regex = regexp.MustCompile(`\[\[(.*?)\]\]`)
 
-func render_reference_link(w io.Writer, node ast.Node, entering bool) (ast.WalkStatus, bool) {
-	block, ok := node.(*ast.Text) // Try to parse node into text node
-	if !ok {                      // If not a text node do not modify
-		return ast.GoToNext, false
+func custom_link_render(w io.Writer, node ast.Text, entering bool) (ast.WalkStatus, bool) {
+	new_content := internal_link_regex.ReplaceAllString(string(node.Literal), "<strong>$1</strong>")
+	io.WriteString(w, new_content)
+	return ast.GoToNext, true
+}
+
+func render_hook(w io.Writer, node ast.Node, entering bool) (ast.WalkStatus, bool) {
+	// If text block use custom text rendering hook
+	if block, ok := node.(*ast.Text); ok {
+		return custom_link_render(w, *block, entering)
 	}
 
-	new_content := internal_link_regex.ReplaceAllString(string(block.Literal), "<strong>$1</strong>")
-
-	io.WriteString(w, new_content)
-
-	return ast.GoToNext, true
+	// Default to use default
+	return ast.GoToNext, false
 }
 
 func get_renderer() *html.Renderer {
 	opts := html.RendererOptions{
-		RenderNodeHook: render_reference_link,
+		RenderNodeHook: render_hook,
 	}
 	return html.NewRenderer(opts)
 }

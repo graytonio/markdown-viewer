@@ -11,10 +11,12 @@ import (
 
 func main() {
 	router := gin.Default()
+	router.Static("/static", "./static")
+	router.LoadHTMLGlob("./templates/*")
 
-	router.GET("/*note_path", func(ctx *gin.Context) {
+	router.GET("/note/*note_path", func(ctx *gin.Context) {
 		path := ctx.Param("note_path")
-		content, err := lib.FetchMarkdownAsHTML(path, lib.GetEnvD("MD_ROOT", "/"))
+		content, err := lib.FetchMarkdownAsHTML(path, lib.GetEnvD("MD_ROOT", "/markdown"))
 		if err != nil {
 			// Handle not found
 			if os.IsNotExist(err) {
@@ -26,7 +28,10 @@ func main() {
 			ctx.AbortWithError(500, err)
 			return
 		}
-		ctx.Data(http.StatusOK, "text/html", content)
+
+		ctx.HTML(http.StatusOK, "note.html", gin.H{
+			"content": content,
+		})
 	})
 
 	// Read in port from ENV

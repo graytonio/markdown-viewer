@@ -9,3 +9,7 @@ services:
       context: .
     volumes:
       - ~/Library/CloudStorage/GoogleDrive-graytonw@jfrog.com/My Drive/Jfrog Notes:/markdown
+      - ./static:/app/static
+      - ./templates:/app/templates
+    environment:
+      - MD_ROOT=/markdown/Organized Notes

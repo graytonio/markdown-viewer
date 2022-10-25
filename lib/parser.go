@@ -2,6 +2,7 @@ package lib
 
 import (
 	"fmt"
+	"html/template"
 	"os"
 	"path"
 	"strings"
@@ -18,11 +19,11 @@ func with_extension(file string, extension string) string {
 }
 
 // Fetch a markdown from disk and render as HTML
-func FetchMarkdownAsHTML(file string, root string) ([]byte, error) {
+func FetchMarkdownAsHTML(file string, root string) (template.HTML, error) {
 	content, err := os.ReadFile(path.Join(root, with_extension(file, "md")))
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
-	return markdown.ToHTML(content, nil, get_renderer()), nil
+	return template.HTML(markdown.ToHTML(content, nil, get_renderer())), nil
 }
