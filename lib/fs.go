@@ -54,7 +54,7 @@ func FetchDirList(dir string, root string) (good_files []DirEntry, err error) {
 }
 
 func GetNoteInfo(name string) *Note {
-	return name_path_map[name]
+	return name_path_map[strings.ToLower(name)]
 }
 
 type DirEntry struct {
@@ -78,8 +78,8 @@ func GenerateNoteTree() error {
 		}
 
 		// Pull out important information
-		rel_path := strings.TrimPrefix(path, notes_root)    // Trim notes_root from path
-		file_name := strings.TrimSuffix(info.Name(), ".md") // Remove extension from files
+		rel_path := strings.TrimPrefix(path, notes_root)                     // Trim notes_root from path
+		file_name := strings.ToLower(strings.TrimSuffix(info.Name(), ".md")) // Remove extension from files
 
 		if note, ok := name_path_map[file_name]; ok {
 			// If previously not duplicate

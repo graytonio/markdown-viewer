@@ -5,11 +5,15 @@ import (
 	"reflect"
 	"runtime"
 	"sync"
+	"time"
+
+	"github.com/go-co-op/gocron"
 )
 
 var wg = sync.WaitGroup{}
+var cron = gocron.NewScheduler(time.UTC)
 
-type Service func(*sync.WaitGroup)
+type Service func(*sync.WaitGroup, *gocron.Scheduler)
 
 var services = []Service{}
 
@@ -25,7 +29,8 @@ func StartSystem() {
 	for idx, system := range services {
 		wg.Add(1)
 		log.Printf("Starting System %d: %v\n", idx, GetFunctionName(system))
-		go system(&wg)
+		go system(&wg, cron)
 	}
+	cron.StartAsync()
 	wg.Wait()
 }

@@ -10,6 +10,7 @@ import (
 	"sync"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-co-op/gocron"
 	"grayton.jfrog.io/markdown-viewer/lib"
 )
 
@@ -29,7 +30,7 @@ func init() {
 	log.Println("Webserver Initialized")
 }
 
-func WebServer(wg *sync.WaitGroup) {
+func WebServer(wg *sync.WaitGroup, cron *gocron.Scheduler) {
 	defer wg.Done()
 	port := lib.GetConfig().Port
 	log.Printf("Web server started and listening on port %s", port)
@@ -53,7 +54,6 @@ func handle_error_response(ctx *gin.Context, err error) bool {
 
 // Base handler for a request for a note
 func handle_note_request(ctx *gin.Context) {
-	log.Println("HELLO")
 	path := ctx.Param("note_path")
 	is_dir, _ := lib.IsDir(path, lib.GetConfig().MDRoot)
 	if is_dir {
