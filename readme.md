@@ -12,6 +12,8 @@ services:
   mdview:
     image: ghcr.io/graytonio/mdview:latest
     container_name: mdview
+    ports:
+      - "9000:9000"
     volumes:
       - /path/to/my/vault:/markdown
     restart: unless-stopped

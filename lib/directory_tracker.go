@@ -1,8 +1,11 @@
 package lib
 
 import (
+	"fmt"
 	"io/fs"
 	"log"
+	"os"
+	"path"
 	"path/filepath"
 	"strings"
 )
@@ -21,10 +24,32 @@ func init() {
 	GenerateNoteTree()
 }
 
+// Make sure a given path has passed file extension
+func WithExtension(file string, extension string) string {
+	if !strings.HasSuffix(file, extension) {
+		return fmt.Sprintf("%s.%s", file, extension)
+	}
+	return file
+}
+
+func IsDir(file string, root string) (bool, error) {
+	stat, err := os.Stat(path.Join(root, file))
+	if err != nil {
+		return false, err
+	}
+	return stat.IsDir(), nil
+}
+
 func GetNoteInfo(name string) *Note {
 	return name_path_map[name]
 }
 
+type DirEntry struct {
+	Name string
+	Path string
+}
+
+// TODO Allow nested root directories for duplicate internal links
 func GenerateNoteTree() error {
 	log.Println("Generating New Note Table...")
 	name_path_map = make(map[string]*Note)
@@ -40,6 +65,7 @@ func GenerateNoteTree() error {
 
 		rel_path := strings.TrimPrefix(path, notes_root)
 		file_name := strings.TrimSuffix(info.Name(), ".md")
+
 		if note, ok := name_path_map[file_name]; ok {
 			// If previously not duplicate
 			if !note.Duplicates {
