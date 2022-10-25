@@ -2,6 +2,7 @@
     --bg-color: #282a36;
     --bg-light: #44475a;
     --fg-color: #f8f8f2;
+	--comm-color: #5193f6;
     --cyan: #8be9fd;
     --green: #50fa7b;
     --orange: #ffb86c;
@@ -12,6 +13,11 @@
 
     background-color: var(--bg-light);
     color: var(--fg-color)
+}
+
+a, a:link, a:visited {
+	color: var(--comm-color);
+	text-decoration: none;
 }
 
 /**

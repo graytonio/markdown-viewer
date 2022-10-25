@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   markdown-viewer:
-    restart: unless-stopped
+    # restart: unless-stopped
     container_name: web-service
     ports:
       - "80:9090"
@@ -11,5 +11,3 @@ services:
       - ~/Library/CloudStorage/GoogleDrive-graytonw@jfrog.com/My Drive/Jfrog Notes:/markdown
       - ./static:/app/static
       - ./templates:/app/templates
-    environment:
-      - MD_ROOT=/markdown/Organized Notes

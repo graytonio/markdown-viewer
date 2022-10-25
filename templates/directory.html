@@ -1,0 +1,14 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="/static/styles.css">
+    </head>
+    <body>
+        <ul>
+        {{range .notes}}
+        <li>
+            <a href="{{ join "/note" .Path }}">{{.Name}}</a>
+        </li>
+        {{end}}
+        <ul>
+    </body>
+</html>
