@@ -10,15 +10,13 @@ import (
 	"sync"
 
 	"github.com/gin-gonic/gin"
-	"grayton.jfrog.com/markdown-viewer/lib"
+	"grayton.jfrog.io/markdown-viewer/lib"
 )
 
 var router *gin.Engine
-var notes_root string
 
 func init() {
 	router = gin.Default()
-	notes_root = lib.GetEnvD("MD_ROOT", "/markdown")
 	router.Static("/static", "./static")
 	router.FuncMap = template.FuncMap{
 		"join": func(paths ...string) string {
@@ -31,9 +29,10 @@ func init() {
 	log.Println("Webserver Initialized")
 }
 
-func StartWebServer(wg *sync.WaitGroup) {
+func WebServer(wg *sync.WaitGroup) {
 	defer wg.Done()
-	port := lib.GetEnvD("PORT", "9090")
+	port := lib.GetConfig().Port
+	log.Printf("Web server started and listening on port %s", port)
 	router.Run(fmt.Sprintf(":%s", port))
 }
 
@@ -54,12 +53,9 @@ func handle_error_response(ctx *gin.Context, err error) bool {
 
 // Base handler for a request for a note
 func handle_note_request(ctx *gin.Context) {
+	log.Println("HELLO")
 	path := ctx.Param("note_path")
-	is_dir, err := lib.IsDir(path, notes_root)
-	if handle_error_response(ctx, err) {
-		return
-	}
-
+	is_dir, _ := lib.IsDir(path, lib.GetConfig().MDRoot)
 	if is_dir {
 		handle_render_directory(ctx)
 	} else {
@@ -70,7 +66,7 @@ func handle_note_request(ctx *gin.Context) {
 // Fetches data and renders note template
 func handle_render_note(ctx *gin.Context) {
 	path := ctx.Param("note_path")
-	content, err := lib.FetchMarkdownAsHTML(path, notes_root)
+	content, err := lib.FetchMarkdownAsHTML(path, lib.GetConfig().MDRoot)
 	if handle_error_response(ctx, err) {
 		return
 	}
@@ -83,7 +79,7 @@ func handle_render_note(ctx *gin.Context) {
 // Fetches data and renders directory template
 func handle_render_directory(ctx *gin.Context) {
 	path := ctx.Param("note_path")
-	files, err := lib.FetchDirList(path, notes_root)
+	files, err := lib.FetchDirList(path, lib.GetConfig().MDRoot)
 	if handle_error_response(ctx, err) {
 		return
 	}
