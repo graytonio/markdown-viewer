@@ -14,14 +14,26 @@ services:
     container_name: mdview
     ports:
       - "9000:9000"
-    volumes:
-      - /path/to/my/vault:/markdown
+    environment:
+      - VAULT=git
+      - GIT_URL=https://github.com/graytonio/my-notes.git
     restart: unless-stopped
 ```
 
 ## Parameters
 
-| Parameter | Function |
-| --------- | -------- |
-| `MD_ROOT` | Root directory for markdown files |
-| `PORT` | Port for web interface |
+| Parameter | Function | Default |
+| --------- | -------- | ------- |
+| `MD_ROOT` | Root directory for markdown files | `/markdown` |
+| `PORT` | Port for web interface | `9000` |
+| `VAULT`| Type of vault file sync ('git', 'local') | `local` |
+| `GIT_URL` | URL to git repo to pull from (required if using git vault) |  |
+| `GIT_UPDATE` | Cron string for how often to pull from git | `30 * * * *` |
+
+## Roadmap
+
+- [ ] CI/CD Pipelines for automatic release of new versions when tagged
+- [ ] Authentication for private git repos
+- [ ] Multiple themes
+- [ ] Sidebar tree view of notes
+- [ ] Search
