@@ -6,13 +6,13 @@ require (
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-co-op/gocron v1.17.1
 	github.com/gomarkdown/markdown v0.0.0-20221013030248-663e2500819c
+	gopkg.in/src-d/go-git.v4 v4.13.1
 )
 
 require (
 	github.com/Microsoft/go-winio v0.6.0 // indirect
 	github.com/emirpasic/gods v1.18.1 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
-	github.com/go-git/go-git v4.7.0+incompatible // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator/v10 v10.10.0 // indirect
@@ -40,7 +40,6 @@ require (
 	golang.org/x/tools v0.2.0 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/src-d/go-billy.v4 v4.3.2 // indirect
-	gopkg.in/src-d/go-git.v4 v4.13.1 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
