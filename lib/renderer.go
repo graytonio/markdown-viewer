@@ -17,6 +17,10 @@ func get_note_link(name string) string {
 	parts := strings.Split(name, "/")
 	note_name := parts[len(parts)-1]
 	note_info := GetNoteInfo(note_name)
+	if note_info == nil {
+		fmt.Printf("ERROR: No note found for %s", note_name)
+		return fmt.Sprintf(link_format, "#", name)
+	}
 	note_path := note_info.Path
 
 	if note_info.Duplicates { // Find correct path if note is duplicate
