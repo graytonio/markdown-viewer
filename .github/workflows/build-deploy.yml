@@ -6,9 +6,6 @@ on:
       - '**'
     tags:
       - 'v*.*.*'
-  create:
-    tags:
-      - 'v*.*.*'
   pull_request:
     branches:
       - 'main'
